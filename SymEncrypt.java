@@ -147,26 +147,14 @@ public class SymEncrypt implements Assignment1Interface{
         
     public BigInteger modExp(BigInteger base, BigInteger exponent, BigInteger modulus){
         /* Method modExp returns the result of raising the given base to the power of the given exponent using the given modulus */
-        BigInteger result = base.mod(modulus); //just to initialise, changes every iteration
-        BigInteger modulo = base.mod(modulus); //fixed value
-
-        //if power 0, than mod(n)=1
-        if(exponent.compareTo(BigInteger.ZERO)==0){
-            System.out.println("in e compare to");
-            return BigInteger.ONE;
-        }
-        //iteratif method, not fast :(
-        while(exponent.compareTo(BigInteger.ZERO)>1){
-            if(result.compareTo(BigInteger.ONE)==0){
-                System.out.println("in result compare to");
-                return BigInteger.ONE;
-            }else if(result.compareTo(BigInteger.ZERO)==0){
-                return BigInteger.ZERO;
-            }
-            result = modulo.multiply(result).mod(modulus);
+        BigInteger result = BigInteger.ONE;
+        while (exponent.compareTo(BigInteger.ZERO) > 0) {
+            if (exponent.testBit(0)) 
+                result = (result.multiply(base)).mod(modulus);
             exponent = exponent.shiftRight(1);
+            base = (base.multiply(base)).mod(modulus);
         }
-        return result;
+        return result.mod(modulus);
     }
 
     public static String bytesToString(byte[] bytes){
